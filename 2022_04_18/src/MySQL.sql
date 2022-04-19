@@ -91,9 +91,9 @@ select * from N;
 
 -- 举例 一对一: 身份证 和 人 . 造句 : 一个人只能对应一个身份证号,一个身份证号也只能对应一个人.
 
--- 举例 一对多: 班级 和 学生 . 造句 : 一个学生只能在一个班级里,一个班级里可以包含多个学生.
+-- 举例 一对多: 班级 和 学生 . 造句 : 一个学生只能在一个班级里,一个班级里可以包含多个学生.     在建表时可以通过 设置外键的方式来建表
 
--- 举例 多对多: 课程 和 学生 . 造句 : 一个学生能选择多们课程,一门课程也可以有多个学生来上课.
+-- 举例 多对多: 课程 和 学生 . 造句 : 一个学生能选择多们课程,一门课程也可以有多个学生来上课.   在建表的时候可以 可以 构建一个 中间表 来实现
 
 -- ER图分为实体、属性、关系三个核心部分。实体是长方形体现，而属性则是椭圆形，关系为菱形。
 
@@ -124,3 +124,87 @@ insert into student2 select name,id from student1;
 select * from student1;
 
 select * from student2;
+
+--------------------------------------------------------------------
+
+-- 聚合查询  : 操作行和行之间的记录    不会统计null
+-- count() 返回查询到的数据的 数量
+-- sum() 返回查询到的数据的 总和，不是数字没有意义
+-- avg() 返回查询到的数据的 平均值，不是数字没有意义
+-- max() 返回查询到的数据的 最大值，不是数字没有意义
+-- min() 返回查询到的数据的 最小值，不是数字没有意义
+
+create table student (id int, name varchar(20));
+
+insert into student values(1,'张三'),(2,'李四'),(3,'王五');
+
+select count(*) from student;
+
+select count(name) from student;
+
+select sum(*) from student;
+
+select avg(*) from student;
+
+-- 同时聚合查询也可以配和 where 表达式 来使用
+select min(id) from student where id > 1;
+
+-- 同时聚合查询函数也可以进行 + - 操作等
+select max(id)-min(id) from student;
+
+--------------------------------------------------------------------
+
+-- group by 分组
+create table emp(
+ id int primary key auto_increment,
+ name varchar(20) not null,
+ role varchar(20) not null,
+ salary numeric(11,2)
+);
+insert into emp(name, role, salary) values
+('马云','服务员', 1000.20),
+('马化腾','游戏陪玩', 2000.99),
+('孙悟空','游戏角色', 999.11),
+('猪无能','游戏角色', 333.5),
+('沙和尚','游戏角色', 700.33),
+('隔壁老王','董事长', 12000.66);
+
+-- 按role来分组,role的值相同为一组,不同为另一组
+select role,max(salary),min(salary),avg(salary) from emp group by role;
+
+-- group by 可以搭配 where 和 having 来使用
+-- where : 表示先进行条件筛选,然后进行分组
+-- having : 表示先进行分组,然后进行条件筛选
+-- 同样的两个可以一起用
+
+-- 单独用
+select role,max(salary),min(salary),avg(salary) from emp where name != '马云' group by role;
+
+select role,max(salary),min(salary),avg(salary) from emp group by role having avg(salary) < 10000;
+
+-- 一起用  : 表示分组前去掉 马云 这条记录 , 分组后 去掉 平均薪资 大于 10000 的 , 同时 是 按 role 分组
+select role,max(salary),min(salary),avg(salary) from emp where name != '马云' group by role having avg(salary) < 10000;
+
+--------------------------------------------------------------------
+
+-- 联合查询(多表查询) : 多表查询是对多张表的数据取笛卡尔积
+-- 笛卡尔积 : 就是对任意的两张表进行 组合排列
+create table student (id int , name varchar(20),classId int);
+
+insert into student values(1,'张三',1),(2,'李四',1),(3,'王五',2);
+
+create table class (classId int, name varchar(20));
+
+insert into class values(1,'软件工程z1'),(2,'软件工程z2');
+
+-- 笛卡尔积 操作
+select * from student,class;
+
+-- 联合查询操作
+select * from student,class where student.classId = class.classId;
+
+-- 同时也可以指定 列 的方式
+select student.name,class.name from student,class where student.classId = class.classId;
+
+
+
