@@ -201,10 +201,51 @@ insert into class values(1,'软件工程z1'),(2,'软件工程z2');
 select * from student,class;
 
 -- 联合查询操作
+-- 方法一:
 select * from student,class where student.classId = class.classId;
+-- 方法二:
+select * from student inner join class on student.classId = class.classId;       -- 内连接
 
 -- 同时也可以指定 列 的方式
 select student.name,class.name from student,class where student.classId = class.classId;
 
 
+--------------------------------------------------------------------
 
+-- 内连接
+-- 一般我们在使用 多表查询 的时候,默认的都是内连接
+select * from student,class where student.id = class.student_id;
+
+select * from student inner join class on student.id = class.student_id;
+-- 一般上面的 inner 可以省略
+
+-- 外连接:
+-- 左外连接
+select * from student left join class on student.id = class.student_id;
+
+-- 右外连接
+select * from student right join class on student.id = class.student_id;
+
+-- 自连接 : 自己对自己进行查询
+select * from student as s1,student s2 where student.id = 3;
+
+-- 注意我们在使用自连接时,应该需要起别名
+select s1.name,s2.id from student as s1,student as s2 where student.id = 3;
+
+--------------------------------------------------------------------
+
+-- 子查询 : 就是套娃操作
+select * from student where classId = (select id from classId );
+
+-- in 子查询也可以搭配 in 来使用
+select * from score where course_id in (select id from course where name = '语文' or name = '英文');
+
+--------------------------------------------------------------------
+
+-- 合并查询 (union/union all) : 前一个自动去重,后一个不会
+-- 如果在一张表中,效果和 or 是一样的(完全等价)
+select * from student where id = 3 union select * from student where id = 4;
+select * from student where id = 3 or id = 4;
+
+-- 多张表的使用方式
+select * from student where id = 3 union select * from score where chinese > 60;
