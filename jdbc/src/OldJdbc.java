@@ -1,11 +1,8 @@
-package edu.wdu.helper;
 
-import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 
-import java.sql.SQLException;
 
 public class OldJdbc{
 	public static void main(String[] args){
@@ -24,7 +21,7 @@ public class OldJdbc{
 			statement.setInt(2, 5);
 			System.out.println(statement);
 			
-			result = statement.executeUpdate();
+			int result = statement.executeUpdate();
 			System.out.println(result);
 			
 			if(statement != null){
