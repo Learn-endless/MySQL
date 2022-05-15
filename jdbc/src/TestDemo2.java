@@ -2,7 +2,7 @@ import java.util.Date;
 
 public class TestDemo2 {
 
-    public static long count = 100_0000_0000L;
+    public static long count = 10_0000_0000L;
 
     public static void serizal(){
         long beg = System.currentTimeMillis();
@@ -41,7 +41,7 @@ public class TestDemo2 {
         System.out.println("消耗时间:"+(end-beg)+"ms");
     }
     public static void main(String[] args) throws InterruptedException {
-//        serizal();
-        func();
+        serizal();
+//        func();
     }
 }
