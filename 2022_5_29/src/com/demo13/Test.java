@@ -82,15 +82,21 @@ class MyTimer{
         }
     }
 }
+//对定时器进行测试
 public class Test {
     public static void main(String[] args) {
+        //创建一个定时器
         MyTimer myTimer = new MyTimer();
+        //注册任务
         myTimer.schedule(new Runnable() {
             @Override
             public void run() {
+                //任务内容
                 System.out.println("hello MyTimer...");
             }
+            //当前时间的3秒后开始执行
         },3000);
+        //main线程的任务内容
         System.out.println("main...");
     }
 }
