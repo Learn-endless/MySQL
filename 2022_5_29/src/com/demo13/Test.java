@@ -27,6 +27,7 @@ class MyTimerTask implements Comparable<MyTimerTask>{
 
     @Override
     public int compareTo(MyTimerTask o) {
+        //按执行时间的从小到大顺序比较
         return (int) (this.time - o.time);
     }
 }
